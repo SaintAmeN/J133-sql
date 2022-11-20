@@ -54,31 +54,47 @@ select * from `straznik` where `skladka_na_ubezpieczenie` is null;
 -- Używanie agregatów - Proszę 
 -- ---------------------------
 -- 1) Napisać zapytania które poda sumę  pensji (pola pensja) dla wszystkich strażników
-
+select sum(`pensja`) from `straznik`;
 
 -- 2) Podać średnią pensję strażników 
+select avg(`pensja`) from `straznik`;
 
 -- 3) Wyświetlić największą pensje
+select max(`pensja`) from `straznik`;
 
 -- 4) Podac liczbę  pasażerów w systemie
+select count(*) from `pasazer`;
 
 -- 5) Podać liczbę strażników ale tych którzy mają uzupełnione pole skladka_na_ubezpieczenie
+select count(*) from `straznik` where `skladka_na_ubezpieczenie` is not null;
 
 -- 
 -- Zapytania z JOIN
 -- -------------------
 -- 1) Wyświetlić wszystkie kontrole przeprowadzone na  lotnisku Gdańsk
+SELECT `k`.* FROM 
+	`kontrola` `k`
+    join 
+    `numer_stanowiska` `ns` 
+		on `k`.`id_numer_stanowiska`=`ns`.`id`
+		where `ns`.`nazwa_portu`='Gdańsk';
 
--- 
--- 2) Wyświetlić wszystkie kontrole przeprowadzone dla lotnisku Gdańsk przez strażnika/ów który ma nazwisko 'Nowak'
-
+-- 2) Wyświetlić wszystkie kontrole przeprowadzone dla lotnisku Gdańsk 
+-- przez strażnika/ów który ma nazwisko 'Nowak'
+SELECT `k`.* FROM 
+	`kontrola` `k`
+    join 
+    `numer_stanowiska` `ns` 
+		on `k`.`id_numer_stanowiska`=`ns`.`id`
+		where 
+			`ns`.`nazwa_portu`='Gdańsk' 
+            and
+            `k`.`id_straznik` in (select `id` from `straznik` where `nazwisko` = 'Nowak');
 
 -- Podzieliliśmy zapytanie na podzapytania, podzapytanie o identyfikatory straznikow z danym nazwiskiem:
 
--- 
 -- 3) Wyświetlić strażników i przeprowadzone przez nich kontrole jeśli strażnik nie ma kontroli to wyświetlamy informację 
 -- o strażniku a w części kontroli wyświetlamy nulle 
-
 
 -- 4) Wyświetlić wszystkie lotniska odwiedzone przez pasażera imie="Jan"  AND nazwisko="Brzechwa"
         
