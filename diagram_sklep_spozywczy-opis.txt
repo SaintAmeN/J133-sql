@@ -1,0 +1,5 @@
+-- Zaprojektuj diagram dla sklepu z produktami spożywczymi (co najmniej 3 tabele). 
+-- Celem stworzenia bazy jest szybkie wyszukiwanie w portalu zamówień produktów do domu.
+-- np. Produkt - co powinien posiadać? Jakie kolumny (po czym będziemy wyszukiwać produktów)?
+-- jakie jeszcze tabele można stworzyć (aby usprawniły wyszukiwanie)?
+-- Jak powiązać nowe tabele (relacje 1to1 1toWiele WieleToWiele)
