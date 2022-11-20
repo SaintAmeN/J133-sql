@@ -81,6 +81,14 @@ SELECT `k`.* FROM
 
 -- 2) Wyświetlić wszystkie kontrole przeprowadzone dla lotnisku Gdańsk 
 -- przez strażnika/ów który ma nazwisko 'Nowak'
+SELECT `k`.* FROM `kontrola` `k`
+    join `numer_stanowiska` `ns` on `k`.`id_numer_stanowiska`=`ns`.`id`
+    join `straznik` `s` on `k`.`id_straznik` = `s`.`id`
+		where 
+			`ns`.`nazwa_portu`='Gdańsk' 
+			and `s`.`nazwisko` = 'Nowak';
+
+-- z podzapytaniem
 SELECT `k`.* FROM 
 	`kontrola` `k`
     join 
@@ -95,28 +103,90 @@ SELECT `k`.* FROM
 
 -- 3) Wyświetlić strażników i przeprowadzone przez nich kontrole jeśli strażnik nie ma kontroli to wyświetlamy informację 
 -- o strażniku a w części kontroli wyświetlamy nulle 
+select * from `kontrola` `k`
+		left join `straznik` `s` on `k`.`id_straznik` = `s`.`id`;
 
 -- 4) Wyświetlić wszystkie lotniska odwiedzone przez pasażera imie="Jan"  AND nazwisko="Brzechwa"
-        
+select distinct `ns`.* from `kontrola` `k`
+		join `pasazer` `p` on `k`.`id_pasazer` = `p`.`id`
+        join `numer_stanowiska` `ns` on `k`.`id_numer_stanowiska` = `ns`.`id`
+        where `p`.`imie`='Jan' and `p`.`nazwisko` = 'Brzechwa';
+
 -- PODZAPYTANIA
--- 1) Wyświetlić wszystkie kontrole przeprowadzone dla lotniksa Gdańsk przez strażnika który ma największe zarobki
--- 
+-- 1) Wyświetlić wszystkie kontrole przeprowadzone dla lotniksa Gdańsk przez 
+-- strażnika który ma największe zarobki
+select max(`pensja`) from `straznik`;
+select `id` from `straznik` where `pensja` = (select max(`pensja`) from `straznik`);
+SELECT * FROM `kontrola` 
+		where `id_straznik` in  (select `id` from `straznik` where `pensja` = (select max(`pensja`) from `straznik`));
+
 -- 2) Wyświetlić z użyciem podzapytania wszystkiich pasażerów skontrolowanych przez strażnika o nazwisku "Nowak"
 -- Wszystkie kontrole wykonane przez 'Nowaków'
+select `id` from `straznik` where `nazwisko`='Nowak'; -- (5,6)
+select distinct `id_pasazer` from `kontrola` where `id_straznik` in (select `id` from `straznik` where `nazwisko`='Nowak');
+-- ^^^^ (1,2)
+SELECT * FROM `pasazer` where `id` in 
+	(select distinct `id_pasazer` from `kontrola` where `id_straznik` in 
+		(select `id` from `straznik` where `nazwisko`='Nowak'));
 
 -- Podstawową tabelą do której wykonujemy zapytanie, jest tabela `pasazer` ponieważ zawiera imiona i nazwiska pasazerow o które musimy odpytać. 
 -- Do niej robię podstawowe zapytanie. (stąd początek zapytania to: "select * from PASAZER....")
 -- 
 -- 3) Wyświetlić strażników a w ostatniej kolumnie kwotę najwyższej pensji strażnika
+select *,(select max(`pensja`) from `straznik`) as 'max pensja' from `straznik`;
+
 -- 4) Wyświetlić strażników a w ostatniej kolumnie informację o ile mniej/więcej zarabia dany strażnik od średniej  
+select avg(`pensja`) from `straznik`;
+select *,(`pensja`-(select avg(`pensja`) from `straznik`)) as 'ile mniej/wiecej' from `straznik`;
 
 -- Zlozone
 -- 1) Wyświetlić pasażera który  nigdy nie był kontrolowany. 
+select p.* from pasazer  p left join kontrola k on p.id = k.id_pasazer where wynik_kontroli is null;
+
 -- 2) Znaleźć pasażera który odwiedził największą ilość lotnisk (użyć LIMIT), wyświetlić jaką liczbę lotnisk odwiedzili.
--- 
--- 
+ SELECT * FROM `pasazer` `p` 
+		join (SELECT `id_pasazer`,count(*) as 'ilosc_kontroli' FROM `kontrola` group by `id_pasazer`) `k`
+			on `p`.`id`=`k`.`id_pasazer` order by `ilosc_kontroli` desc limit 1;
+            
+SELECT `id_pasazer`,count(*) as 'ilosc_kontroli' FROM `kontrola` group by `id_pasazer`;
+ 
 -- 3) Znaleźć 2 strażników którzy skontrolowali największą ilość klientów.
+SELECT `id_straznik`,count(*) as 'ilosc' FROM `kontrola` group by `id_straznik` order by `ilosc` desc limit 2;
+SELECT * FROM `straznik` where `id` in 
+	(select `id_straznik` from 
+		(SELECT `id_straznik`,count(*) as 'ilosc' FROM `kontrola` group by `id_straznik` order by `ilosc` desc limit 2) `d`);
+
+SELECT s.*,count(*) as 'ilosc' 
+	FROM `kontrola` `k`
+		right join `straznik` `s` on `k`.`id_straznik`=`s`.`id`
+			group by `id_straznik` 
+			order by `ilosc` desc 
+			limit 2;
+        
 -- 4) Znaleźć lotnisko przez które poleciała najmniejsza ilość pasażerów .
+SELECT distinct `id_pasazer`,`nazwa_portu` as 'ilosc' FROM `kontrola` `k`
+	join `numer_stanowiska` `ns` on `k`.`id_numer_stanowiska`=`ns`.`id`
+    group by `id_numer_stanowiska`,`id_pasazer`;
+    
+select *,count(*) from `kontrola` group by `id_numer_stanowiska`,`id_pasazer`;
+
+select * from `kontrola` `k`
+	right join `numer_stanowiska` `ns` on `k`.`id_numer_stanowiska` = `ns`.`id`;
+
+select *,count(*) as 'ilosc' from `kontrola` `k`
+		right join `numer_stanowiska` `ns` on `k`.`id_numer_stanowiska` = `ns`.`id`
+		where `k`.`wynik_kontroli` is not null
+		group by `ns`.`nazwa_portu`;
+
+select `ns1`.`nazwa_portu`,`pz`.`ilosc` from `numer_stanowiska` `ns1`
+	left join (select *,count(*) as 'ilosc' from `kontrola` `k`
+		right join `numer_stanowiska` `ns` on `k`.`id_numer_stanowiska` = `ns`.`id`
+		where `k`.`wynik_kontroli` is not null
+		group by `ns`.`nazwa_portu`) `pz` on `ns1`.`id`=`pz`.`id_numer_stanowiska`
+	group by `ns1`.`nazwa_portu`
+    order by `ilosc` asc
+    limit 1;
+    
 -- 5) Znaleźć miesiac (w przeciagu całego okresu)  w którym był największy ruch na wszystkich lotniskach / wybranym lotnisku. Użyć
 -- 	date_trunc('month', timestamp '2001-02-16 20:38:40')
 
