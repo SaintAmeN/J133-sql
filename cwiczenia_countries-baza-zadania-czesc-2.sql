@@ -1,0 +1,31 @@
+-- 1. Wyświetl następujące dane pracowników: imię i nazwisko w kolumnie o nagłówku 
+-- OSOBA oraz zarobki w kolumnie o nagłówku PENSJA.
+-- 2. Wyświetl imiona i nazwiska pracowników zatrudnionych w oddziale o identyfikatorze 100.
+-- 3. Wyświetl imiona i nazwiska pracowników nie zatrudnionych na stanowisku IT_PROG.
+-- 4. Wyświetl datę systemową.
+-- 5. Wyświetl imiona, nazwiska i daty zatrudnienia pracowników.
+-- 6. Wyświetl imiona, nazwiska i daty zatrudnienia pracowników zatrudnionych po 2005 roku. Posortuj wyniki wg daty zatrudnienia.
+-- 7. Wyświetl imiona, nazwiska i daty zatrudnienia pracowników zatrudnionych w 2007 roku. Posortuj wyniki wg daty zatrudnienia (podaj dwa rozwiązania).
+-- 8. Wyświetl dane pracowników, których zarobki mieszczą się w przedziale [60 000; 80 000] (podaj dwa rozwiązania).
+-- 9. Wyświetl nazwy oddziałów, dla których nie wprowadzono kierownika (tabela DEPARMENTS).
+-- 10. Wyświetl dane pracowników, uporządkowane malejąco wg pensji.
+-- 11. Wyświetl dane pracowników oddziału o identyfikatorze 60 uporządkowaną malejąco wg pensji.
+-- 12. Wyświetl dane pracowników oddziałów o identyfikatorach 50, 60, 100 (podaj dwa rozwiązania).
+-- 13. Wyświetl dane pracowników oddziałów o identyfikatorach 70, 80, 110, dla których pensja nie znajduje się w przedziale [50 000; 90 000]. Wyniki posortuj wg pensji.
+-- 14. Wyświetl imiona, nazwiska, daty zatrudnienia i pensje pracowników zatrudnionych na stanowisku ST_CLERK, których data zatrudnienia nie przypada na lata 2004-2005.
+-- 15. Wyświetl dane prezesa (sprawdź pole manager_id).
+-- 16. Wyświetl imiona pracowników bez powtórzeń. Wyniki posortuj rosnąco.
+-- 17. Wyświetl nazwy oddziałów, dla których trzecią literą w nazwie nie jest ’o’ (tabela DEPARTMENTS).
+-- 18. Wyświetl dane pracowników, których email kończy się literą ’G’ i są zatrudnieni w oddziałach o identyfikatorach 90, 110.
+-- 19. Wyświetl dane oddziałów, dla których identyfikator lokalizacji jest różny od 1700 (tabela DEPARTMENTS).
+-- 20. Wyświetl różne imiona pracowników rozpoczynające się na literę ’K’ lub ’A’. Wyniki posortuj rosnąco.
+-- 21. Wyświetl imiona, nazwiska i pensje powiększone o 20% pracowników zatrudnionych w oddziałach o identyfikatorach 50, 60 i 80.
+-- 22. Wyświetl lokalizacje dla których nie wprowadzono kodu pocztowego.
+-- 23. Wyświetl dane oddziałów o identyfikatorze lokalizacji większym od 2000.
+-- 24. Wyświetl dane lokalizacji nie znajdujących się w miastach, których nazwy rozpoczynają się na literę ‘T’ i 'B'.
+-- 25. Wyświetl minimalne i maksymalne pensje dla poszczególnych stanowisk (tabela JOBS).
+-- 26. Wyświetl nazwy stanowisk, minimalne pensje i minimalne pensje powiększone o 10%. Wyniki posortuj wg minimalnej pensji.
+-- 27. Wyświetl nazwy stanowisk, i różnice pomiędzy maksymalnymi i minimalnymi pensjami (nadaj kolumnie alias ROZNICA). Wyniki posortuj wg różnicy (podaj trzy rozwiązania).
+-- 28. Wyświetl bez duplikatów identyfikatory lokalizacji z tabeli DEPARTMENTS.
+-- 29. Wyświetl nazwy regionów posortowane w porządku rosnącym.
+-- 30. Wyświetl minimalną i maksymalną pensję dla stanowisk o nazwie rozpoczynającej się od ’Sale’.
